@@ -49,7 +49,6 @@ networks:
 
 
 
-
       volumes:
             -   '/opt/web/html:/var/www/html'
             -   '/opt/web/pics:/var/www/pictures'
