@@ -1,0 +1,30 @@
+version: '3.5'
+services:
+     flame:
+        image: flames
+        container_name: pawelmalak/flame:latest
+        ports:
+          - '5005:5005'
+        volumes:
+          - /opt/flame:/app/data
+          #- /var/run/docker.sock:/var/run/docker.sock # optional but required for Docker integration feature
+        environment:
+          - PASSWORD=flame_password
+        restart: unless-stopped #не будет перезапускаться при перезагрузке
+     heimdall:
+       image: lscr.io/linuxserver/heimdall:latest
+       container_name: heimdall
+       environment:
+         - PUID=1000
+         - PGID=1000
+         - TZ=Etc/Berline
+       volumes:
+         - /opt/heimdall/config:/config
+       ports:
+         - 80:80
+         - 443:443
+       restart: unless-stopped
+
+
+
+

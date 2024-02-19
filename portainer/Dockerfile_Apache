@@ -1,0 +1,23 @@
+
+mkdir docker
+cd docker
+ll
+
+touch dockerfile
+ll
+
+vi dockerfile
+FROM ubuntu:22.04
+LABEL authors="semenov_av"
+LABEL type="Тестовый докер файл для portainer"
+RUN apt-get update
+RUN apt-get install apache2 -y
+EXPOSE 80
+CMD ["apache2ctl", "-D, "daemon off;", "FOREGROUND"]
+
+
+
+
+
+
+

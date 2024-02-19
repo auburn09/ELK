@@ -1,0 +1,38 @@
+version: '3.5'
+services:
+    portainer:
+        image: portainer/portainer-ce:latest
+        container_name: portainer
+        portainer_data
+        volumes:
+            -   '/var/run/docker.sock:/var/run/docker.sock'
+            -   '/opt/portainer/portainer_data:/data'
+        environment:
+            - 'TZ=Europe/Berlin'
+        ports:
+            - '9443:9443'
+            - '8000:8000'
+        restart: always
+networks:
+    default:
+        driver: bridge
+        name: web-net
+
+
+
+
+
+#FROM ubuntu:22.04
+#LABEL authors="semenov_av"
+#LABEL type="Тестовый докер файл для portainer"
+#RUN apt-get update
+#RUN apt-get install apache2 -y
+#EXPOSE 80
+#CMD ["apache2ctl", "-D, "daemon off;", "FOREGROUND"]
+
+
+
+
+
+
+

@@ -1,0 +1,67 @@
+---
+version: "3"
+services:
+  opensearch-node1A:
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch-node1A
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node1A
+      - discovery.seed_hosts=opensearch-node1A,opensearch-node2A
+      - cluster.initial_cluster_manager_nodes=opensearch-node1A,opensearch-node2A
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data1:/usr/share/opensearch/data
+    ports:
+      - 9200:9200
+      - 9603:9603
+    networks:
+      - opensearch-net
+  opensearch-node2A:
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch-node2A
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node2A
+      - discovery.seed_hosts=opensearch-node1A,opensearch-node2A
+      - cluster.initial_cluster_manager_nodes=opensearch-node1A,opensearch-node2A
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data2:/usr/share/opensearch/data
+    networks:
+      - opensearch-net
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: opensearch-dashboards:latest
+    ports:
+      - 5600:5600
+    expose:
+      - "5600"
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch-node1A:9200","https://opensearch-node2A:9200"]'
+    networks:
+      - opensearch-net
+  logstash-with-plugin:
+    image: opensearchproject/logstash-oss-with-opensearch-output-plugin:7.16.2
+    container_name: logstash-with-plugin
+    networks:
+      - opensearch-net
+networks:
+  opensearch-net:
+    driver: bridge

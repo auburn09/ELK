@@ -1,0 +1,76 @@
+version: '3.5'
+services:
+     php-app:
+        image: php:apache
+        container_name: app
+        ports:
+          - '80:80'
+          - '443:443'
+        restart: unless-stopped
+        depends_on:
+          - app-db
+          - app-redis
+        networks:
+          - internet
+          - localnet
+    app-db:
+      image: postgres
+      container_name: app-postgres
+      restart: unless-stopped
+      environment:
+        - 'POSTGRES_PASSWORD=mysecretpassword'
+      networks:
+         - localnet
+
+    app-redis:
+      image: redis
+      container_name: app-redis
+      restart: unless-stopped
+      environment:
+        - 'POSTGRES_PASSWORD=mysecretpassword'
+      networks:
+        - localnet
+
+
+networks:
+  internet:
+    driver: bridge
+    name: internet
+  localnet:
+    driver: bridge
+    name: localnet
+
+
+
+
+
+
+
+
+        volumes:
+            -   '/opt/web/html:/var/www/html'
+            -   '/opt/web/pics:/var/www/pictures'
+        environment:
+            - 'NGINX_HOST=web.romnero.de'
+            - 'NGINX_PORT=80'
+
+
+        
+
+
+
+
+#FROM ubuntu:22.04
+#LABEL authors="semenov_av"
+#LABEL type="Тестовый докер файл для portainer"
+#RUN apt-get update
+#RUN apt-get install apache2 -y
+#EXPOSE 80
+#CMD ["apache2ctl", "-D, "daemon off;", "FOREGROUND"]
+
+
+
+
+
+
+
