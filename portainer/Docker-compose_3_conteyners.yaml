@@ -38,7 +38,7 @@ networks:
     name: internet
   localnet:
     driver: bridge
-    name: localnet
+    name: localnethjgj
 
 
 
